@@ -11,13 +11,17 @@ options {
 
 // The suffix '^' means make it a root. The suffix '!' means ignore it.
 
-expr: multExpr ((PLUS^ | MINUS^) multExpr)*;
+expr:
+    multExpr ((PLUS^ | MINUS^) multExpr)*;
+
 PLUS: '+';
 MINUS: '-';
 
-multExpr: atom (TIMES^ atom)*;
+multExpr: atom ((TIMES^ | DIVIDE^ | MOD^) atom)*;
 
 TIMES: '*';
+DIVIDE: '/';
+MOD: '%';
 
 atom: INT | ID | '('! expr ')'!;
 
@@ -30,13 +34,13 @@ ASSIGN: '=';
 
 prog
     : (stmt {
-        #ifdef DEBUG
-        pANTLR3_STRING s = $stmt.tree->toStringTree($stmt.tree);
-        assert (s->chars);
-        printf (" haizei tree \%s\n", s->chars);
-        #endif
+            #ifdef DEBUG
+            pANTLR3_STRING s = $stmt.tree->toStringTree($stmt.tree);
+            assert (s->chars);
+            printf (" haizei tree \%s\n", s->chars);
+            #endif
         }
-        )+
+    )+
     ;
 
 ID: ('a'..'z'|'A'..'Z')+;

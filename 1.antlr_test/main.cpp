@@ -14,8 +14,10 @@ class ExprTreeEvaluator {
    public:
     int run(pANTLR3_BASE_TREE);
 };
+
 pANTLR3_BASE_TREE getChild(pANTLR3_BASE_TREE, unsigned);
 const char* getText(pANTLR3_BASE_TREE tree);
+
 int main(int argc, char* argv[]) {
     pANTLR3_INPUT_STREAM input;
     pExprCppTreeLexer lex;
@@ -38,6 +40,7 @@ int main(int argc, char* argv[]) {
     input->close(input);
     return 0;
 }
+
 int ExprTreeEvaluator::run(pANTLR3_BASE_TREE tree) {
     pANTLR3_COMMON_TOKEN tok = tree->getToken(tree);
     if (tok) {
@@ -60,6 +63,10 @@ int ExprTreeEvaluator::run(pANTLR3_BASE_TREE tree) {
                 return run(getChild(tree, 0)) - run(getChild(tree, 1));
             case TIMES:
                 return run(getChild(tree, 0)) * run(getChild(tree, 1));
+            case DIVIDE:
+                return run(getChild(tree, 0)) / run(getChild(tree, 1));
+            case MOD:
+                return run(getChild(tree, 0)) % run(getChild(tree, 1));
             case ASSIGN: {
                 string var(getText(getChild(tree, 0)));
                 int val = run(getChild(tree, 1));
@@ -75,6 +82,7 @@ int ExprTreeEvaluator::run(pANTLR3_BASE_TREE tree) {
         int r = 0;
         for (int i = 0; i < k; i++) {
             r = run(getChild(tree, i));
+            cout << "Expression result: " << r << '\n';
         }
         return r;
     }
@@ -84,6 +92,7 @@ pANTLR3_BASE_TREE getChild(pANTLR3_BASE_TREE tree, unsigned i) {
     assert(i < tree->getChildCount(tree));
     return (pANTLR3_BASE_TREE)tree->getChild(tree, i);
 }
+
 const char* getText(pANTLR3_BASE_TREE tree) {
     return (const char*)tree->getText(tree)->chars;
 }
