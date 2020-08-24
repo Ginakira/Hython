@@ -25,9 +25,19 @@ MOD: '%';
 
 atom: INT | ID | '('! expr ')'!;
 
+defid_sub:
+    ID
+    | ID^ ASSIGN! expr;
+
+defid: DEF^ defid_sub (','! defid_sub)* ';'!
+    ;
+
+DEF: 'def';
+
 stmt:
-    expr NEWLINE -> expr // tree rewrite syntax
-    | ID ASSIGN expr NEWLINE -> ^(ASSIGN ID expr) // tree notation
+    expr ';' NEWLINE -> expr // tree rewrite syntax
+    | ID ASSIGN expr ';' NEWLINE -> ^(ASSIGN ID expr) // tree notation
+    | defid
     | NEWLINE ->; // ignore
 
 ASSIGN: '=';
@@ -43,7 +53,7 @@ prog
     )+
     ;
 
-ID: ('a'..'z'|'A'..'Z')+;
+ID: ('a'..'z'|'A'..'Z') ('a'..'z' | 'A'..'Z' | '0'..'9')*;
 INT: '~'?'0'..'9'+;
 NEWLINE: '\r'?'\n';
 WS: (' ' | '\t')+{$channel = HIDDEN;};
