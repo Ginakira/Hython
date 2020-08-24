@@ -37,7 +37,7 @@ DEF: 'def';
 stmt:
     expr ';' NEWLINE -> expr // tree rewrite syntax
     | ID ASSIGN expr ';' NEWLINE -> ^(ASSIGN ID expr) // tree notation
-    | defid
+    | defid NEWLINE -> defid
     | NEWLINE ->; // ignore
 
 ASSIGN: '=';
