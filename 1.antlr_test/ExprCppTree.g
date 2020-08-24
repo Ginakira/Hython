@@ -22,7 +22,7 @@ TIMES: '*';
 atom: INT | ID | '('! expr ')'!;
 
 stmt:
-    expr NEWLINE -> expr // tree rewrite syntaxz
+    expr NEWLINE -> expr // tree rewrite syntax
     | ID ASSIGN expr NEWLINE -> ^(ASSIGN ID expr) // tree notation
     | NEWLINE ->; // ignore
 
