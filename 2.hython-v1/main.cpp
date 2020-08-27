@@ -1,10 +1,10 @@
+#include <hythonLexer.h>
+#include <hythonParser.h>
+
 #include <cassert>
 #include <iostream>
 #include <map>
 #include <string>
-
-#include <hythonLexer.h>
-#include <hythonParser.h>
 using std::cout;
 using std::endl;
 using std::map;
@@ -104,7 +104,7 @@ int ExprTreeEvaluator::run(pANTLR3_BASE_TREE tree) {
                 return run(getChild(tree, 0)) - run(getChild(tree, 1));
             case TIMES:
                 return run(getChild(tree, 0)) * run(getChild(tree, 1));
-            case DIVIDE:
+            case DIV:
                 return run(getChild(tree, 0)) / run(getChild(tree, 1));
             case MOD:
                 return run(getChild(tree, 0)) % run(getChild(tree, 1));
