@@ -13,9 +13,13 @@ class ExprTreeEvaluator {
     map<string, int> memory;
 
    public:
+    ExprTreeEvaluator() : next(nullptr) {}
+    ExprTreeEvaluator(ExprTreeEvaluator* next) : next(next) {}
     int run(pANTLR3_BASE_TREE);
+    void def_param(string, int);
     void set_param(string, int);
     int get_param(string);
+    ExprTreeEvaluator* next;
 };
 
 pANTLR3_BASE_TREE getChild(pANTLR3_BASE_TREE, unsigned);
@@ -44,9 +48,27 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void ExprTreeEvaluator::set_param(string name, int val) {
+void ExprTreeEvaluator::def_param(string name, int val) {
     if (memory.find(name) != memory.end()) {
+#ifdef DEBUG
+        for (auto x : memory) {
+            cout << "debug log(memory) : " << x.first << " " << x.second
+                 << endl;
+        }
+#endif
         throw std::runtime_error("param redefined : " + name);
+    }
+    memory[name] = val;
+    return;
+}
+
+void ExprTreeEvaluator::set_param(string name, int val) {
+    if (memory.find(name) == memory.end()) {
+        if (this->next) {
+            this->next->set_param(name, val);
+            return;
+        }
+        throw std::runtime_error("undefined param : " + name);
     }
     memory[name] = val;
     return;
@@ -54,6 +76,7 @@ void ExprTreeEvaluator::set_param(string name, int val) {
 
 int ExprTreeEvaluator::get_param(string name) {
     if (memory.find(name) == memory.end()) {
+        if (this->next) return this->next->get_param(name);
         throw std::runtime_error("undefined param : " + name);
     }
     return memory[name];
@@ -97,15 +120,24 @@ int ExprTreeEvaluator::run(pANTLR3_BASE_TREE tree) {
                     }
                     cout << "set param val : " << var << " = " << init_val
                          << endl;
-                    this->set_param(var, init_val);
+                    this->def_param(var, init_val);
                 }
                 return init_val;
+            } break;
+            case BLOCK: {
+                ExprTreeEvaluator new_this(this);
+                int k = tree->getChildCount(tree);
+                for (int i = 0; i < k; ++i) {
+                    int val = new_this.run(getChild(tree, i));
+                    cout << "Block Value : " << val << endl;
+                }
+                return 0;
             } break;
             case ASSIGN: {
                 string var(getText(getChild(tree, 0)));
                 get_param(var);
                 int val = run(getChild(tree, 1));
-                memory[var] = val;
+                set_param(var, val);
                 return val;
             }
             default:
