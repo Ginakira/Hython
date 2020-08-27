@@ -1,8 +1,8 @@
 all: grammar main.cpp
-	g++ -std=c++11 -I./include -I./include/antlr -L./lib -o ./bin/hython main.cpp ./src/*.c -lantlr3c
+	g++ -std=c++11 -I./include -I./include/antlr -L./lib -o ./bin/hython main.cpp ./src/*.c ./src/*.cc -lantlr3c
 
 debug: grammar main.cpp
-	g++ -DDEBUG -std=c++11 -I./include -I./include/antlr -L./lib -o ./bin/hython main.cpp ./src/*.c -lantlr3c
+	g++ -DDEBUG -std=c++11 -I./include -I./include/antlr -L./lib -o ./bin/hython main.cpp ./src/*.c ./src/*.cc -lantlr3c
 
 grammar: ./thirdpart/hython.g
 	java -jar ./thirdpart/antlr-3.4-complete.jar ./thirdpart/hython.g
