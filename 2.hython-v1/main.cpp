@@ -1,10 +1,10 @@
-#include <hythonLexer.h>
-#include <hythonParser.h>
-
 #include <cassert>
 #include <iostream>
 #include <map>
 #include <string>
+
+#include "./include/hythonLexer.h"
+#include "./include/hythonParser.h"
 using std::cout;
 using std::endl;
 using std::map;
