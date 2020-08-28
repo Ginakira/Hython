@@ -18,4 +18,14 @@
 {
     def a = 123;
     print a, 456, 789;
+    if (a < 666 && a < 444 || a > 666) {
+        print 666;
+    } else {
+        print 777;
+    }
+    if (a > 999) {
+        print 999;
+    } else {
+        print 888;
+    }
 }

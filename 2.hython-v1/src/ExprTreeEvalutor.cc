@@ -78,6 +78,57 @@ int ExprTreeEvaluator::run(haizei::ASTNode tree) {
                 }
                 return 0;
             } break;
+            // CONDITION EXPRESSION
+            case GT:
+            case LITTLE:
+            case EQ:
+            case GE:
+            case LE:
+            case NE:
+            case AND:
+            case OR: {
+                bool ret = false;
+                int lval = this->run(tree[0]);
+                if (tree.size() == 1) return lval;
+                int rval = this->run(tree[1]);
+                switch (tree.type()) {
+                    case GT: {
+                        ret = (lval > rval);
+                    } break;
+                    case LITTLE: {
+                        ret = (lval < rval);
+                    } break;
+                    case EQ: {
+                        ret = (lval == rval);
+                    } break;
+                    case GE: {
+                        ret = (lval >= rval);
+                    } break;
+                    case LE: {
+                        ret = (lval <= rval);
+                    } break;
+                    case NE: {
+                        ret = (lval != rval);
+                    } break;
+                    case AND: {
+                        ret = (lval && rval);
+                    } break;
+                    case OR: {
+                        ret = (lval || rval);
+                    } break;
+                }
+                return ret;
+            } break;
+            // IF CLAUSE
+            case IF: {
+                bool cond = this->run(tree[0]);
+                if (cond) {
+                    this->run(tree[1]);
+                } else if (tree.size() > 2) {
+                    this->run(tree[2]);
+                }
+                return 0;
+            } break;
             case PRINT: {
                 for (int i = 0; i < tree.size(); ++i) {
                     int val = this->run(tree[i]);
