@@ -129,6 +129,19 @@ int ExprTreeEvaluator::run(haizei::ASTNode tree) {
                 }
                 return 0;
             } break;
+            // FOR CLAUSE
+            case FOR: {
+                haizei::ASTNode init_tree = tree[0];
+                haizei::ASTNode cond_tree = tree[1];
+                haizei::ASTNode for_do_tree = tree[2];
+                haizei::ASTNode stmt_tree = tree[3];
+
+                for (this->run(init_tree); this->run(cond_tree);
+                     this->run(for_do_tree)) {
+                    this->run(stmt_tree);
+                }
+                return 0;
+            } break;
             case PRINT: {
                 for (int i = 0; i < tree.size(); ++i) {
                     int val = this->run(tree[i]);
