@@ -35,3 +35,10 @@
         print i;
     }
 }
+{
+    def a = 11;
+    while (a <= 100) {
+        print a;
+        a = a + 11;
+    }
+}
