@@ -96,6 +96,14 @@ int ExprTreeEvaluator::run(haizei::ASTNode tree) {
                 return run(tree[0]) / run(tree[1]);
             case MOD:
                 return run(tree[0]) % run(tree[1]);
+            case BLOCK: {
+                ExprTreeEvaluator new_this(this);
+                for (int i = 0; i < tree.size(); ++i) {
+                    int val = new_this.run(tree[i]);
+                    cout << "Block Value : " << val << endl;
+                }
+                return 0;
+            } break;
             case DEF: {
                 int init_val = 0;
                 for (int i = 0; i < tree.size(); ++i) {
@@ -109,14 +117,6 @@ int ExprTreeEvaluator::run(haizei::ASTNode tree) {
                     this->def_param(var, init_val);
                 }
                 return init_val;
-            } break;
-            case BLOCK: {
-                ExprTreeEvaluator new_this(this);
-                for (int i = 0; i < tree.size(); ++i) {
-                    int val = new_this.run(tree[i]);
-                    cout << "Block Value : " << val << endl;
-                }
-                return 0;
             } break;
             case ASSIGN: {
                 string var(tree[0].text());
