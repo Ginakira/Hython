@@ -78,6 +78,13 @@ int ExprTreeEvaluator::run(haizei::ASTNode tree) {
                 }
                 return 0;
             } break;
+            case PRINT: {
+                for (int i = 0; i < tree.size(); ++i) {
+                    int val = this->run(tree[i]);
+                    cout << "[PRINT] " << val << endl;
+                }
+                return 0;
+            } break;
             case DEF: {
                 int init_val = 0;
                 for (int i = 0; i < tree.size(); ++i) {
