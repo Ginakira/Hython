@@ -164,4 +164,5 @@ int ExprTreeEvaluator::run(haizei::ASTNode tree) {
         }
         return r;
     }
+    return 0;
 }
