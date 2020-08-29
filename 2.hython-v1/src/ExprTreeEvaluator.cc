@@ -109,6 +109,31 @@ int ExprTreeEvaluator::run(haizei::ASTNode tree) {
             case NE: {
                 return run(tree[0]) != run(tree[1]);
             } break;
+            case IF: {
+                if (run(tree[0])) {
+                    run(tree[1]);
+                } else if (tree.size() == 3) {
+                    run(tree[2]);
+                }
+                return 0;
+            } break;
+            case FOR: {
+                for (run(tree[0]); run(tree[1]); run(tree[2])) {
+                    run(tree[3]);
+                }
+                return 0;
+            } break;
+            case WHILE: {
+                while (run(tree[0])) {
+                    run(tree[1]);
+                }
+                return 0;
+            } break;
+            case DOWHILE: {
+                do {
+                    run(tree[1]);
+                } while (run(tree[0]));
+            } break;
             case DEF: {
                 int init_val = 0;
                 for (int i = 0; i < tree.size(); ++i) {

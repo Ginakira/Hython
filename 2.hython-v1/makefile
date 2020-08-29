@@ -12,3 +12,4 @@ grammar: ./thirdpart/hython.g
 run:
 	./bin/hython ./testdata/input1
 	./bin/hython ./testdata/input2
+	./bin/hython ./testdata/input3
