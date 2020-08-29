@@ -36,14 +36,39 @@ jar 包生成的文件就是帮助转化抽象语法树的
 ## 简单的流程控制
 
 1. 整理工程目录，include/lib/bin/src...
+
 2. 整理 main.cpp 内容，分成头文件和源文件，main.cpp 尽量简单
+
 3. print 子句
+
 4. 条件表达式(==,<=,>=,&&,||)
+
 5. if 结构的增加
+
 6. for 结构的增加
+
 7. while 结构的增加
+
 8. do...while 结构的增加
+
 9. 找出存在的BUG`IMPORTANT`
+
+    1. for循环的实现是不正确的，导致初始化语句中定义的变量在for作用域结束后仍能访问
+
+    2. 应当改成
+
+        ```cpp
+        case FOR: {
+            ExprTreeEvaluator new_this(this);
+            for (new_this.run(tree[0]); new_this.run(tree[1]);
+                 new_this.run(tree[2])) {
+                new_this.run(tree[3]);
+            }
+            return 0;
+        } break;
+        ```
+
+        
 
 ## 增加弱类型系统
 
