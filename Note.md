@@ -43,3 +43,9 @@ jar 包生成的文件就是帮助转化抽象语法树的
 6. for 结构的增加
 7. while 结构的增加
 8. do...while 结构的增加
+9. 找出存在的BUG`IMPORTANT`
+
+## 增加弱类型系统
+
+1. 用责任链模式改写整体ExprTreeEvaluator类的功能
+2. 设计并实现弱类型系统
