@@ -8,9 +8,6 @@
 
 #include "../include/ExprTreeEvaluator.h"
 
-using std::cout;
-using std::endl;
-
 ExprTreeEvaluator::ExprTreeEvaluator() : next(nullptr) {}
 ExprTreeEvaluator::ExprTreeEvaluator(ExprTreeEvaluator* next) : next(next) {}
 
@@ -18,8 +15,8 @@ void ExprTreeEvaluator::def_param(string name, int val) {
     if (memory.find(name) != memory.end()) {
 #ifdef DEBUG
         for (auto x : memory) {
-            cout << "debug log(memory) : " << x.first << " " << x.second
-                 << endl;
+            std::cout << "debug log(memory) : " << x.first << " " << x.second
+                      << std::endl;
         }
 #endif
         throw std::runtime_error("param redefined : " + name);
@@ -76,8 +73,16 @@ int ExprTreeEvaluator::run(haizei::ASTNode tree) {
             case BLOCK: {
                 ExprTreeEvaluator new_this(this);
                 for (int i = 0; i < tree.size(); ++i) {
-                    int val = new_this.run(tree[i]);
+                    new_this.run(tree[i]);
                 }
+                return 0;
+            } break;
+            case PRINT: {
+                for (int i = 0; i < tree.size(); ++i) {
+                    i&& std::cout << " ";
+                    std::cout << run(tree[i]);
+                }
+                std::cout << std::endl;
                 return 0;
             } break;
             case DEF: {
@@ -100,7 +105,7 @@ int ExprTreeEvaluator::run(haizei::ASTNode tree) {
                 return val;
             }
             default:
-                cout << "Unhandled token: #" << tree.type() << '\n';
+                std::cout << "Unhandled token: #" << tree.type() << '\n';
                 return -1;
         }
     } else {

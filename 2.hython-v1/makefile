@@ -6,7 +6,6 @@ debug: grammar main.cpp
 
 grammar: ./thirdpart/hython.g
 	java -jar ./thirdpart/antlr-3.4-complete.jar ./thirdpart/hython.g
-	mv ./hython.tokens ./include/
 	mv ./thirdpart/*.c src/
 	mv ./thirdpart/*.h include/
 
