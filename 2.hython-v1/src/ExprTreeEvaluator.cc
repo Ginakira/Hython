@@ -85,6 +85,30 @@ int ExprTreeEvaluator::run(haizei::ASTNode tree) {
                 std::cout << std::endl;
                 return 0;
             } break;
+            case OR: {
+                return run(tree[0]) || run(tree[1]);
+            } break;
+            case AND: {
+                return run(tree[0]) && run(tree[1]);
+            } break;
+            case GT: {
+                return run(tree[0]) > run(tree[1]);
+            } break;
+            case LITTLE: {
+                return run(tree[0]) < run(tree[1]);
+            } break;
+            case EQ: {
+                return run(tree[0]) == run(tree[1]);
+            } break;
+            case GE: {
+                return run(tree[0]) >= run(tree[1]);
+            } break;
+            case LE: {
+                return run(tree[0]) <= run(tree[1]);
+            } break;
+            case NE: {
+                return run(tree[0]) != run(tree[1]);
+            } break;
             case DEF: {
                 int init_val = 0;
                 for (int i = 0; i < tree.size(); ++i) {
