@@ -1,4 +1,5 @@
 {
+    print 123;
     def a = 100;
     def b = 123 + a;
     def c = a * 2 + b;

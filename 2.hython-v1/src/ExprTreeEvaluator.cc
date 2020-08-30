@@ -8,6 +8,8 @@
 
 #include "../include/ExprTreeEvaluator.h"
 
+#include "../include/handler.h"
+
 ExprTreeEvaluator::ExprTreeEvaluator() : next(nullptr) {}
 ExprTreeEvaluator::ExprTreeEvaluator(ExprTreeEvaluator* next) : next(next) {}
 
@@ -47,118 +49,15 @@ int ExprTreeEvaluator::get_param(string name) {
 
 int ExprTreeEvaluator::run(haizei::ASTNode tree) {
     if (tree.hasToken()) {
-        switch (tree.type()) {
-            case INT: {
-                std::string s = tree.text();
-                if (s[0] == '~') {
-                    return -atoi(s.c_str() + 1);
-                } else {
-                    return atoi(s.c_str());
-                }
+        for (auto handler = IHandler::getInstance(); handler != nullptr;
+             handler = handler->next) {
+            if (handler->test(tree.type())) {
+                return handler->run(tree, this);
             }
-            case ID: {
-                ;
-                return get_param(tree.text());
-            }
-            case PLUS:
-                return run(tree[0]) + run(tree[1]);
-            case MINUS:
-                return run(tree[0]) - run(tree[1]);
-            case TIMES:
-                return run(tree[0]) * run(tree[1]);
-            case DIV:
-                return run(tree[0]) / run(tree[1]);
-            case MOD:
-                return run(tree[0]) % run(tree[1]);
-            case BLOCK: {
-                ExprTreeEvaluator new_this(this);
-                for (int i = 0; i < tree.size(); ++i) {
-                    new_this.run(tree[i]);
-                }
-                return 0;
-            } break;
-            case PRINT: {
-                for (int i = 0; i < tree.size(); ++i) {
-                    i&& std::cout << " ";
-                    std::cout << run(tree[i]);
-                }
-                std::cout << std::endl;
-                return 0;
-            } break;
-            case OR: {
-                return run(tree[0]) || run(tree[1]);
-            } break;
-            case AND: {
-                return run(tree[0]) && run(tree[1]);
-            } break;
-            case GT: {
-                return run(tree[0]) > run(tree[1]);
-            } break;
-            case LITTLE: {
-                return run(tree[0]) < run(tree[1]);
-            } break;
-            case EQ: {
-                return run(tree[0]) == run(tree[1]);
-            } break;
-            case GE: {
-                return run(tree[0]) >= run(tree[1]);
-            } break;
-            case LE: {
-                return run(tree[0]) <= run(tree[1]);
-            } break;
-            case NE: {
-                return run(tree[0]) != run(tree[1]);
-            } break;
-            case IF: {
-                if (run(tree[0])) {
-                    run(tree[1]);
-                } else if (tree.size() == 3) {
-                    run(tree[2]);
-                }
-                return 0;
-            } break;
-            case FOR: {
-                ExprTreeEvaluator new_this(this);
-                for (new_this.run(tree[0]); new_this.run(tree[1]);
-                     new_this.run(tree[2])) {
-                    new_this.run(tree[3]);
-                }
-                return 0;
-            } break;
-            case WHILE: {
-                while (run(tree[0])) {
-                    run(tree[1]);
-                }
-                return 0;
-            } break;
-            case DOWHILE: {
-                do {
-                    run(tree[1]);
-                } while (run(tree[0]));
-            } break;
-            case DEF: {
-                int init_val = 0;
-                for (int i = 0; i < tree.size(); ++i) {
-                    string var(tree[i].text());
-                    init_val = 0;
-                    if (tree[i].size() == 1) {
-                        init_val = run(tree[i][0]);
-                    }
-                    this->def_param(var, init_val);
-                }
-                return init_val;
-            } break;
-            case ASSIGN: {
-                string var(tree[0].text());
-                get_param(var);
-                int val = run(tree[1]);
-                set_param(var, val);
-                return val;
-            }
-            default:
-                std::cout << "Unhandled token: #" << tree.type() << '\n';
-                return -1;
         }
+        throw std::runtime_error("Unhandled token #" +
+                                 std::to_string(tree.type()));
+        return -1;
     } else {
         int r = 0;
         for (int i = 0; i < tree.size(); i++) {
