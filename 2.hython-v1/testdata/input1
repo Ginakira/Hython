@@ -7,7 +7,7 @@
     {
         def d = a + 12;
         print a, d;
-        a = 500;
+        a = 500
         def a = 10000;
         def e = a + 12;
         print a, e;
