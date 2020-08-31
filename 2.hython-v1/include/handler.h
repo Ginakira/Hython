@@ -58,7 +58,7 @@ class IHandler {
     static void initHandler();
     IHandler() = default;
     IHandler(const IHandler &) = default;
-    ~IHandler() = default;
+    ~IHandler();
 };
 
 #endif
