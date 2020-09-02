@@ -1,0 +1,15 @@
+all: grammar main.cpp
+	g++ -std=c++11 -I./include -I./include/antlr -L./lib -o ./bin/hython main.cpp ./src/*.c ./src/*.cc -lantlr3c
+
+debug: grammar main.cpp
+	g++ -DDEBUG -std=c++11 -I./include -I./include/antlr -L./lib -o ./bin/hython main.cpp ./src/*.c ./src/*.cc -lantlr3c
+
+grammar: ./thirdpart/hython.g
+	java -jar ./thirdpart/antlr-3.4-complete.jar ./thirdpart/hython.g
+	mv ./thirdpart/*.c src/
+	mv ./thirdpart/*.h include/
+
+run:
+	./bin/hython ./testdata/input1
+	./bin/hython ./testdata/input2
+	./bin/hython ./testdata/input3
