@@ -29,19 +29,18 @@ void ASTNode::destroy() {
     input->close(input);
 }
 
-int ASTNode::size() { return this->tree->getChildCount(tree); }
+int ASTNode::size() const { return this->tree->getChildCount(tree); }
 
 std::string ASTNode::text() {
     return std::string((char *)tree->getText(tree)->chars);
 }
 
-bool ASTNode::hasToken() {
-    tok = tree->getToken(tree);
+bool ASTNode::hasToken() const {
     if (tok) return true;
     return false;
 }
 
-int ASTNode::type() { return tok->type; }
+int ASTNode::type() const { return tok->type; }
 
 ASTNode ASTNode::operator[](int i) {
     if (i < 0 || i >= this->size()) {

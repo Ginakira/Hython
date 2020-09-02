@@ -14,20 +14,13 @@
 
 #include "./AST.h"
 
-using std::string;
-using std::map;
-
+namespace haizei {
 class ExprTreeEvaluator {
    public:
     ExprTreeEvaluator();
-    ExprTreeEvaluator(ExprTreeEvaluator*);
     int run(haizei::ASTNode);
-    void def_param(string, int);
-    void set_param(string, int);
-    int get_param(string);
-    ExprTreeEvaluator* next;
 
    private:
-    map<string, int> memory;
 };
+}  // namespace haizei
 #endif

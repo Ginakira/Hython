@@ -7,8 +7,8 @@ int main(int argc, char* argv[]) {
     assert(argc > 1);
     haizei::ASTNode tree(argv[1]);
 
-    ExprTreeEvaluator eval;
-    int rr = eval.run(tree);
+    haizei::ExprTreeEvaluator eval;
+    eval.run(tree);
     tree.destroy();
     return 0;
 }
